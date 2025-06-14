@@ -32,11 +32,12 @@
     },
     "applications":{
        "app": {
-            "type":"python 3.9",
-            "path":"/webapp/src/",
-            "module":"webapp.wsgi",
+            "type": "python 3.9",
+            "path": "/webapp/src/webapp",
+            "module": "webapp.wsgi",
             "environment": {
                 "DJANGO_SETTINGS_MODULE": "webapp.settings",
+                "PYTHONPATH": "/webapp/src"
             }
         }
     }
