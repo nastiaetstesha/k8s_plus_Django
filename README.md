@@ -93,3 +93,21 @@ kubectl apply -f kubernetes/
 ```
 minikube service django --url
 ```
+
+## Очистка сессий
+Регулярная задача очищает устаревшие сессии через CronJob:
+
+- Файл: `kubernetes/clearsessions-cronjob.yaml`
+- Запускается каждый день в полночь
+- Принудительный запуск:
+
+```
+kubectl create job --from=cronjob/clearsessions clearsessions-once
+```
+## Проверка статуса
+```
+kubectl get ingress
+kubectl get svc
+kubectl get pods
+kubectl describe ingress django-ingress
+```
