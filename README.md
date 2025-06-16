@@ -83,16 +83,36 @@ $ docker compose build web
 ```
 minikube start
 ```
+## Установи Ingress Controller:
 
+
+`minikube addons enable ingress`
+## Добавь домен в /etc/hosts:
+
+`sudo nano /etc/hosts`
+Добавь строчку:
+
+`127.0.0.1 star-burger.test`
+
+## Установи PostgreSQL через Helm:
+```
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install pg-db bitnami/postgresql --set auth.database=starburger --set auth.username=starburger
+```
 ## 2. Применить секреты и манифесты:
 ```
 kubectl apply -f kubernetes/secret.yaml
 kubectl apply -f kubernetes/
 ```
+## Запусти миграции:
+
+`kubectl apply -f kubernetes/migrate.yaml`
 ## 3. Открыть сайт:
-```
-minikube service django --url
-```
+`minikube tunnel`
+
+# В другом окне
+`open http://star-burger.test`
+
 
 ## Очистка сессий
 Регулярная задача очищает устаревшие сессии через CronJob:
@@ -111,3 +131,14 @@ kubectl get svc
 kubectl get pods
 kubectl describe ingress django-ingress
 ```
+
+| Файл                         | Назначение                                                                              |
+| ---------------------------- | --------------------------------------------------------------------------------------- |
+| `deployment.yaml`            | Разворачивает основное Django-приложение. Указывает образ, переменные окружения и порт. |
+| `service.yaml`               | Описывает ClusterIP-сервис для Django, через который работает Ingress.                  |
+| `ingress.yaml`               | Настраивает доменное имя (`star-burger.test`) и маршрут на `service`.                   |
+| `pod.yaml`                   | (Дополнительно) пример одиночного Pod-а, используется для отладки.                      |
+| `secret.yaml`                | Хранит переменные окружения, включая `SECRET_KEY` и `DATABASE_URL`.                     |
+| `clearsessions.yaml`         | Job для ручовой очистки устаревших Django-сессий.                                       |
+| `clearsessions-cronjob.yaml` | CronJob для автоматической еженочной очистки сессий.                                    |
+| `migrate.yaml`               | Job, запускающая `python manage.py migrate` после деплоя.                               |
