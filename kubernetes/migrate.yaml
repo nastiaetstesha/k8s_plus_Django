@@ -10,16 +10,8 @@ spec:
           image: django_app
           imagePullPolicy: IfNotPresent
           command: ["python", "manage.py", "migrate", "--noinput"]
-          env:
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: django-secret
-                  key: SECRET_KEY
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: django-secret
-                  key: DATABASE_URL
+          envFrom:
+            - secretRef:
+                name: django-secret
       restartPolicy: Never
   backoffLimit: 1

@@ -94,11 +94,22 @@ minikube start
 
 `127.0.0.1 star-burger.test`
 
-## Установи PostgreSQL через Helm:
+## Разверни PostgreSQL через Helm:
 ```
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install pg-db bitnami/postgresql --set auth.database=starburger --set auth.username=starburger
+helm install pg-db bitnami/postgresql \
+  --set auth.database=starburger \
+  --set auth.username=starburger \
+  --set auth.password= пароль \
+  --set primary.persistence.enabled=false
 ```
+💡 Для доступа к базе извне (например, через psql):
+
+```
+kubectl port-forward svc/pg-db-postgresql 5432:5432 &
+PGPASSWORD=пароль psql -h 127.0.0.1 -U starburger -d starburger
+```
+
 ## 2. Применить секреты и манифесты:
 ```
 kubectl apply -f kubernetes/secret.yaml

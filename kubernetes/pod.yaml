@@ -14,17 +14,10 @@ spec:
       imagePullPolicy: IfNotPresent
       ports:
         - containerPort: 80
+      envFrom:
+        - secretRef:
+            name: django-secret
       env:
-        - name: SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: django-secret
-              key: SECRET_KEY
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: django-secret
-              key: DATABASE_URL
         - name: ALLOWED_HOSTS
           value: "192.168.49.2,127.0.0.1,localhost"
         - name: DEBUG
