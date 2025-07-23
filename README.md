@@ -161,5 +161,43 @@ kubectl describe ingress django-ingress
    ```
    kubectl create secret generic psql-ssl-cert \
      --from-file=root.crt=./root.crt \
-     --namespace edu-anastasia-avakova
+     --namespace имя
     ```
+
+## Деплой на prod
+
+- База данных PostgreSQL (с SSL)
+- Kubernetes кластер с namespace `edu-anastasia-avakova`
+- Docker image `nastiaetstesha/django-site:<git-hash>` опубликован в Docker Hub
+- Заданы переменные окружения через Kubernetes `Secret`
+
+1. Обнови образ:
+
+   ```
+   git rev-parse --short HEAD
+   docker build -t nastiaetstesha/django-site:<hash> .
+   docker push nastiaetstesha/django-site:<hash>
+   ```
+## Обнови манифест django-pod.yaml:
+
+`image: nastiaetstesha/django-site:<hash>`
+## Применяй:
+
+`kubectl apply -f deploy/yc-sirius/edu-focused-lamarr/django-pod.yaml`
+## Проверь статус:
+
+
+`kubectl get pods -n edu-anastasia-avakova`
+`kubectl logs pod/django -n edu-anastasia-avakova`
+## Временно пробрось порт:
+
+`kubectl port-forward pod/django 8000:80 -n edu-anastasia-avakova`
+## 🔧 Как запустить management-скрипты?
+
+`kubectl exec -it pod/django -n edu-anastasia-avakova -- python manage.py migrate`
+`kubectl exec -it pod/django -n edu-anastasia-avakova -- python manage.py createsuperuser`
+
+-- Все настройки задаются через Kubernetes Secret
+## Просмотр логов:
+
+`kubectl logs pod/django -n`
