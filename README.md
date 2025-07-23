@@ -153,3 +153,13 @@ kubectl describe ingress django-ingress
 | `clearsessions.yaml`         | Job для ручовой очистки устаревших Django-сессий.                                       |
 | `clearsessions-cronjob.yaml` | CronJob для автоматической еженочной очистки сессий.                                    |
 | `migrate.yaml`               | Job, запускающая `python manage.py migrate` после деплоя.                               |
+
+## Как подготовить dev окружение
+
+1. Получить `root.crt` из интерфейса Яндекс Облака.
+2. Создать секрет:
+   ```
+   kubectl create secret generic psql-ssl-cert \
+     --from-file=root.crt=./root.crt \
+     --namespace edu-anastasia-avakova
+    ```
