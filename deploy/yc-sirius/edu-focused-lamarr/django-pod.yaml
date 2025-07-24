@@ -3,12 +3,14 @@ kind: Pod
 metadata:
   name: django
   namespace: edu-anastasia-avakova
+  labels:
+    name: django
 spec:
   containers:
     - name: django
       image: nastiaetstesha/django-site:65d43e5
       ports:
-        - containerPort: 80
+        - containerPort: 8000
       volumeMounts:
         - name: ssl-cert-volume
           mountPath: /root/.postgresql/root.crt
