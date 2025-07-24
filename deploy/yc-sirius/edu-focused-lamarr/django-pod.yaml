@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: django
-      image: nastiaetstesha/django-site:65d43e5
+      image: nastiaetstesha/django-site:6efe7e3
       ports:
         - containerPort: 8000
       volumeMounts:
@@ -20,4 +20,4 @@ spec:
     - name: ssl-cert-volume
       secret:
         secretName: psql-ssl-cert
-        defaultMode: 0600
+        defaultMode: 384

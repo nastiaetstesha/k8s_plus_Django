@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: django-service
+  name: django-ingress
   namespace: edu-anastasia-avakova
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
