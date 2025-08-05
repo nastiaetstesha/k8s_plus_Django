@@ -154,6 +154,14 @@ kubectl describe ingress django-ingress
 | `clearsessions-cronjob.yaml` | CronJob для автоматической еженочной очистки сессий.                                    |
 | `migrate.yaml`               | Job, запускающая `python manage.py migrate` после деплоя.                               |
 
+
+# Ссылка на сайт 
+https://edu-anastasia-avakova.sirius-k8s.dvmn.org/admin/login/?next=/admin/
+
+## Ссылка на описание выделенных ресурсов облачной инфраструктуры с инструкциями как до них добраться
+https://sirius-env-registry.website.yandexcloud.net/edu-anastasia-avakova.html
+## Ссылка на docker hub
+https://hub.docker.com/repository/docker/nastiaetstesha/django-site/general
 ## Как подготовить dev окружение
 
 1. Получить `root.crt` из интерфейса Яндекс Облака.
@@ -201,3 +209,29 @@ kubectl describe ingress django-ingress
 ## Просмотр логов:
 
 `kubectl logs pod/django -n`
+
+# Как собрать и опубликовать Docker-образ
+
+1. Получить хэш текущего коммита:
+
+```
+GITHASH=$(git rev-parse --short HEAD)
+```
+2. Собрать образ:
+
+```
+docker build \
+  -t YOUR_DOCKERHUB_USERNAME/django-site:$GITHASH \
+  -t YOUR_DOCKERHUB_USERNAME/django-site:dev .
+```
+
+3. Запушить:
+```
+docker push YOUR_DOCKERHUB_USERNAME/django-site:$GITHASH
+docker push YOUR_DOCKERHUB_USERNAME/django-site:dev
+```
+4. Проверить:
+
+```
+docker pull YOUR_DOCKERHUB_USERNAME/django-site:$GITHASH
+```

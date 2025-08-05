@@ -8,9 +8,12 @@ metadata:
 spec:
   containers:
     - name: django
-      image: nastiaetstesha/django-site:fixed
+      image: nastiaetstesha/django-site:82a3042
       ports:
         - containerPort: 80
+      env:
+        - name: ALLOWED_HOSTS
+          value: "edu-anastasia-avakova.sirius-k8s.dvmn.org"
       volumeMounts:
         - name: ssl-cert-volume
           mountPath: /root/.postgresql/root.crt
