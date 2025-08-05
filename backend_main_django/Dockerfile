@@ -20,6 +20,8 @@
 FROM nginx/unit:1.25.0-python3.9
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONPATH=/webapp/src
+
 WORKDIR /webapp
 COPY requirements.txt /webapp/
 
@@ -36,4 +38,10 @@ ENV SECRET_KEY=django-insecure-01f40nf4nf93n9
 RUN python manage.py collectstatic --noinput
 EXPOSE 80
 VOLUME ["/media"]
-CMD ["unitd", "--no-daemon", "--control", "unix:/var/run/control.unit.sock"]
+CMD unitd --no-daemon --control unix:/var/run/control.unit.sock & \
+    sleep 2 && \
+    curl -X PUT --unix-socket /var/run/control.unit.sock \
+         -d @/docker-entrypoint.d/unit_config.json \
+         -H 'Content-Type: application/json' \
+         http://localhost/config/ && \
+    tail -f /dev/null

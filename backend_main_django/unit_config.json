@@ -30,14 +30,14 @@
             }
         ]
     },
-    "applications":{
-       "app": {
+    "applications": {
+        "app": {
             "type": "python 3.9",
-            "path": "/webapp/src/webapp",
-            "module": "wsgi",
+            "path": "/webapp/src",
+            "module": "webapp.wsgi",
             "environment": {
-                "DJANGO_SETTINGS_MODULE": "settings",
-                "PYTHONPATH": "/webapp/src/webapp"
+                "DJANGO_SETTINGS_MODULE": "webapp.settings",
+                "PYTHONPATH": "/webapp/src"
             }
         }
     }

@@ -6,8 +6,19 @@ metadata:
 spec:
   selector:
     name: django
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"django-service","namespace":"edu-anastasia-avakova"},"spec":{"ports":[{"nodePort":31250,"port":80,"targetPort":80}],"selector":{"app":"django"},"type":"NodePort"}}
+  selfLink: /api/v1/namespaces/edu-anastasia-avakova/services/django-service
+status:
+  loadBalancer: {}
+spec:
+  type: ClusterIP
+  selector:
+    app: django
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8000
-      nodePort: 31250
+      targetPort: 80
+
+
