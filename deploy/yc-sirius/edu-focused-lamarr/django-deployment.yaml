@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django
+  namespace: edu-anastasia-avakova
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+        - name: django
+          image: nastiaetstesha/django-site:82a3042
+          ports:
+            - containerPort: 80
+          env:
+            - name: ALLOWED_HOSTS
+              value: "edu-anastasia-avakova.sirius-k8s.dvmn.org,*,127.0.0.1,localhost"
+          volumeMounts:
+            - name: ssl-cert-volume
+              mountPath: /root/.postgresql/root.crt
+              subPath: root.crt
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /healthz/
+              port: 80
+            initialDelaySeconds: 25
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /healthz/
+              port: 80
+            initialDelaySeconds: 90
+            periodSeconds: 20
+
+      volumes:
+        - name: ssl-cert-volume
+          secret:
+            secretName: psql-ssl-cert
+            defaultMode: 0600
